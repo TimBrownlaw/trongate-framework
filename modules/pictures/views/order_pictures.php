@@ -8,40 +8,40 @@
         Options
     </div>
     <div class="card-body">
-        <?php 
-        echo anchor($cancel_url, 'GO BACK', array("class" => "button alt")); 
+        <?php
+        echo anchor($cancel_url, 'GO BACK', array("class" => "button alt"));
         ?>
-        
+
         <input onclick="submitOrder()" type='button' class="button" value='Save Order' id='submit' style="width: 20em;"/>
-        <?php 
-        echo anchor($upload_url, 'UPLOAD MORE PICTURES', array("class" => "button go-right")); 
+        <?php
+//        echo anchor($upload_url, 'UPLOAD MORE PICTURES', array("class" => "button go-right"));
         ?>
     </div>
     <div class="card-body">
 
-    <?php 
+    <?php
         if (count($rows) == 0) {
     ?>
         <div id="gallery-pics" style="border-bottom: 0; grid-template-columns: repeat(1, 1fr);">
             <p class="text-center">There is no Pictures for this record yet</p>
         </div>
-    <?php    
+    <?php
     } else {
     ?>
         <div id="gallery-pics">
         <?php
         $i = 1;
         foreach ($rows as $row) {
-            
+
             $picture_path = $target_directory.$row->picture;
             echo '<div class="sort" id="'.$row->id.'" ondblclick="openPicPreview(\'preview-pic-modal\', \''.$picture_path.'\')">';
                     echo '<img src="'.$picture_path.'" alt="'.$row->picture.'"></div>';
 
             $i++;
-            
+
 
         }
-        
+
         ?>
         </div>
     <?php } ?>
@@ -58,20 +58,20 @@
     <div class="modal-body">
         <p id="preview-pic"></p>
 
-        <?php 
-        $attr_close = array( 
+        <?php
+        $attr_close = array(
             "class" => "alt",
             "onclick" => "closeModal()"
-        );   
+        );
         echo '<p>'.form_button('close', 'Cancel', $attr_close);
 
-        $attr_ditch_pic = array( 
+        $attr_ditch_pic = array(
             "class" => "danger",
             "id" => "ditch-pic-btn",
             "onclick" => "ditchPreviewPic()"
         );
         echo form_button('delete_pic', 'DELETE THIS PICTURE', $attr_ditch_pic);
-        $attr_rotate_pic = array( 
+        $attr_rotate_pic = array(
             "class" => "alt",
             "id" => "rotate-pic-btn",
             "onclick" => "rotatePreviewPic()"
@@ -90,7 +90,7 @@
     .card {
         min-height: 50vh;
     }
-    
+
    #gallery-pics {
        display: grid;
        grid-gap: 1em;
@@ -176,7 +176,7 @@ const deleteUrl = '<?= $delete_url  ?>';
      for (var i = 0; i < nodes.length; i++) {
 
        var recordId = document.getElementsByClassName("sort")[i].id;
-      
+
        var pos = i+1;
        var id = recordId;
        var params = {
@@ -184,9 +184,9 @@ const deleteUrl = '<?= $delete_url  ?>';
            priority: pos
        }
 
-   
+
        var orderUrl = '<?= BASE_URL ?>api/update/pictures/' + recordId;
-       
+
 
        var http = new XMLHttpRequest()
        http.open('POST', orderUrl)
@@ -225,7 +225,7 @@ const deleteUrl = '<?= $delete_url  ?>';
         var previewPic =  document.querySelector('#preview-pic img');
         var picPath = previewPic.src;
         var removePicUrl = baseUrl + 'my_filezone/upload/' + segment1 + '/' + updateId;
-        
+
         const http = new XMLHttpRequest();
         http.open('DELETE', removePicUrl);
         http.setRequestHeader('Content-type', 'application/json');
@@ -244,7 +244,7 @@ const deleteUrl = '<?= $delete_url  ?>';
         var rotatePicUrl = baseUrl + 'my_filezone/rotate/' + segment1 + '/' + updateId;
 
      /*    console.log(rotatePicUrl); */
-        
+
         const http = new XMLHttpRequest();
         http.open('POST', rotatePicUrl);
         http.setRequestHeader('Content-type', 'application/json');
@@ -253,10 +253,10 @@ const deleteUrl = '<?= $delete_url  ?>';
         http.onload = function() {
            /*  var res => res.text(); */
             /* var picRotate = res; */
-            
+
             document.getElementById('preview-pic').innerHTML = "";
             var targetEl = document.getElementById('preview-pic');
-            
+
 
         var imgPreview = document.createElement('img');
         imgPreview.setAttribute("src", picPath);
