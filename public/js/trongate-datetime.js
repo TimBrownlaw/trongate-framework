@@ -11,11 +11,11 @@ var dateFormatObj = {
 //please change these settings to suit your language
 var dayNames = [
     "Sunday",
-    "Monday", 
-    "Tuesday", 
-    "Wednesday", 
-    "Thursday", 
-    "Friday", 
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
     "Saturday"
 ];
 
@@ -38,20 +38,19 @@ var unavailableBefore;
 var unavailableAfter;
 
 
-
 // DATE/TIME PICKER SETTINGS END : DO NOT EDIT BELOW THIS LINE!!!
 
-var pathArray = window.location.pathname.split( '/' );
+var pathArray = window.location.pathname.split('/');
 var segment3 = pathArray[3];
 var datePickerFields = _('.date-picker');
 var timePickerFields = _('.time-picker');
 var dateTimePickerFields = _('.datetime-picker');
 var dateRangePickerFields = _('.date-range');
 var targetInputValue = ''; //the value of the form input that has been clicked
-var targetInputValueSm  = ''; //alt version of targetInputValue (with time removed)
+var targetInputValueSm = ''; //alt version of targetInputValue (with time removed)
 var boxDayNumLZ, boxDayNum, boxYearNum;
 
-if ((datePickerFields.length>0) || (timePickerFields.length>0) || (dateTimePickerFields.length>0) || (dateRangePickerFields.length>0) ) {
+if ((datePickerFields.length > 0) || (timePickerFields.length > 0) || (dateTimePickerFields.length > 0) || (dateRangePickerFields.length > 0)) {
 
     //initialize date/time picker vars
     var assumedDate = new Date;
@@ -71,34 +70,34 @@ if ((datePickerFields.length>0) || (timePickerFields.length>0) || (dateTimePicke
 
     //check for date/time picker fields;
     //date-picker, time-picker, datetime-picker, date-range, time-range
-    if (datePickerFields.length>0) {
+    if (datePickerFields.length > 0) {
         initDatePickers();
         disableDatePickerInputs('date-picker');
         listenForOffsideClicks('date-picker', 'datepicker-calendar');
     }
-    
-    if (timePickerFields.length>0) {
+
+    if (timePickerFields.length > 0) {
         initTimePickers();
         listenForOffsideClicks('time-picker', 'timepicker-popup');
     }
 
-    if (dateTimePickerFields.length>0) {
+    if (dateTimePickerFields.length > 0) {
         initDateTimePickers();
         listenForOffsideClicks('datetime-picker', 'datetime-picker-calendar');
     }
 
-    if (dateRangePickerFields.length>0) {
+    if (dateRangePickerFields.length > 0) {
         initDateRangePickers();
         listenForOffsideClicks('date-range', 'datepicker-calendar');
     }
 
 }
 
-/* 
+/*
  * retrive the date format string from the locale
  * the format pieces are YYYY MM DD and the delimeter
- */ 
-function getDateFormatStringFromLocale (locale) {
+ */
+function getDateFormatStringFromLocale(locale) {
     const formatObj = new Intl.DateTimeFormat(locale).formatToParts(new Date());
 
     return formatObj
@@ -122,7 +121,7 @@ function getDateFormatStringFromLocale (locale) {
  * given in the global variable localeString.
  * returns a date obj or 'Invalid Date' like date.parse
  */
-function parseDate (input) {
+function parseDate(input) {
     var parsedDate = 'Invalid Date';
     if (input !== '') {
         var format = getDateFormatStringFromLocale(localeString);
@@ -130,7 +129,9 @@ function parseDate (input) {
         try {
             var i = 0;
             var format_pos = {};
-            format.replace(/(YYYY|DD|MM)/g, function (part) { format_pos[part] = i++; });
+            format.replace(/(YYYY|DD|MM)/g, function (part) {
+                format_pos[part] = i++;
+            });
             var year = parseInt(input_parts[format_pos['YYYY']]);
             var month = parseInt(input_parts[format_pos['MM']]);
             var day = parseInt(input_parts[format_pos['DD']]);
@@ -154,7 +155,7 @@ function parseDateTime(input) {
         if (input.includes(" at ")) {
             inputParts = input.split('at');
         } else {
-            inputParts[0] = input.substring(0,10);
+            inputParts[0] = input.substring(0, 10);
             inputParts[1] = input.substring(11);
         }
         parsedDate = parseDate(inputParts[0].trim());
@@ -182,10 +183,12 @@ function parseDateTime(input) {
 function formatDateObj(dateObj, outputType) {
     //outputType can be time, date or timedate
 
-    var options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    var options = {year: 'numeric', month: '2-digit', day: '2-digit'};
     if ((outputType == 'date') || (outputType == 'datetime')) {
         var output = dateObj.toLocaleString(localeString, options);
         if (outputType == 'date') {
+            // Format Date
+            output = output.replace(/\//g, '-');
             return output;
         }
     }
@@ -212,7 +215,7 @@ function createClassFromDate(dateObj, type) {
     //type can be 'before' or 'after'
     var className = type + '-';
     var dateStr = formatDateObj(dateObj, 'date');
-    className+= dateStr;
+    className += dateStr;
     className = className.replace(/\//g, '-');
     return className;
 }
@@ -268,7 +271,7 @@ function adjustPartnerClass(elType, partnerEl, dateObj) {
 function initInThePastDeclarations() {
     var inThePastEls = document.getElementsByClassName('in-the-past');
 
-    if (inThePastEls.length>0) {
+    if (inThePastEls.length > 0) {
 
         var dateStr = formatDateObj(todayDate, 'date');
         dateStr = dateStr.replace(/\//g, '-');
@@ -290,7 +293,7 @@ function initInThePastDeclarations() {
 function initInTheFutureDeclarations() {
     var inTheFutureEls = document.getElementsByClassName('in-the-future');
 
-    if (inTheFutureEls.length>0) {
+    if (inTheFutureEls.length > 0) {
 
         var dateStr = formatDateObj(todayDate, 'date');
         dateStr = dateStr.replace(/\//g, '-');
@@ -312,13 +315,13 @@ function initInTheFutureDeclarations() {
 function estPartner(el) {
     for (var i = 0; i < dateRangePickerFields.length; i++) {
         if (dateRangePickerFields[i] == el) {
-            var elPos = i+1;
-            var elType = (elPos % 2  == 0) ? "2nd" : "1st";
-            
+            var elPos = i + 1;
+            var elType = (elPos % 2 == 0) ? "2nd" : "1st";
+
             if (elType == '1st') {
                 var partnerIndex = elPos;
             } else {
-                var partnerIndex = i-1;
+                var partnerIndex = i - 1;
             }
 
             var params = {
@@ -463,7 +466,7 @@ function buildDatePickerHead() {
 
     var datePickerHeadline = document.createTextNode(currentMonth + " " + currentYear);
     datePickerHeadCenter.appendChild(datePickerHeadline);
-    
+
     datePickerHead.appendChild(datePickerHeadCenter);
 
     var datePickerHeadRight = document.createElement("div");
@@ -486,13 +489,13 @@ function buildAndPopulateDatePickerTbl() {
 
     var monthStartDayNum = getMonthStartDayNum();
     var numDaysInMonth = getNumDaysInMonth();
-    var numWeeksThisMonth = Math.ceil(numDaysInMonth/7);
+    var numWeeksThisMonth = Math.ceil(numDaysInMonth / 7);
 
-    if ((monthStartDayNum>weekStartsOn) && (numWeeksThisMonth<5)) {
+    if ((monthStartDayNum > weekStartsOn) && (numWeeksThisMonth < 5)) {
         numWeeksThisMonth = 5;
     }
 
-    if ((numDaysInMonth>29) && (monthStartDayNum>=6)) {
+    if ((numDaysInMonth > 29) && (monthStartDayNum >= 6)) {
         numWeeksThisMonth++;
     }
 
@@ -501,31 +504,31 @@ function buildAndPopulateDatePickerTbl() {
     } else {
         var boxCounter = -1;
     }
-    
+
     var dayCounter = 0;
 
     var i = 1;
     var isCurrentDay = false;
     var isAvailable = false;
-    
+
     var selectedDate = parseDate(targetInputValueSm);
     if (selectedDate == 'Invalid Date') {
         selectedDate = new Date();
     }
     var selectedDateStr = selectedDate.getFullYear();
-    selectedDateStr += "-"+addZeroBefore(selectedDate.getMonth()+1);
-    selectedDateStr += "-"+addZeroBefore(selectedDate.getDate());
-  
+    selectedDateStr += "-" + addZeroBefore(selectedDate.getMonth() + 1);
+    selectedDateStr += "-" + addZeroBefore(selectedDate.getDate());
+
     do {
         //create a week row
         calendarWeekRow = document.createElement("tr");
         calendarWeekRow.setAttribute("class", "tg-datepicker-row");
 
         for (var colNum = 0; colNum < 7; colNum++) {
-            boxCounter++; 
+            boxCounter++;
             var calendarTblTd = document.createElement("td");
 
-            if ((boxCounter<monthStartDayNum) || (dayCounter>=numDaysInMonth)) {
+            if ((boxCounter < monthStartDayNum) || (dayCounter >= numDaysInMonth)) {
                 calendarTblTd.setAttribute("class", "empty-day");
                 var boxDayNum = ' ';
             } else {
@@ -542,7 +545,7 @@ function buildAndPopulateDatePickerTbl() {
                     if (isCurrentDay !== true) {
                         isCurrentDay = testForCurrentDay(dayCounter);
                     }
-                    
+
                     if (isCurrentDay == true) {
                         calendarTblTd.setAttribute("class", "day-cell current-day");
                         isCurrentDay = false;
@@ -574,9 +577,9 @@ function buildAndPopulateDatePickerTbl() {
 
         datePickerTbl.appendChild(calendarWeekRow);
 
-      i++;
+        i++;
     }
-    while (i <= numWeeksThisMonth);  
+    while (i <= numWeeksThisMonth);
 
     return datePickerTbl;
 
@@ -606,9 +609,9 @@ function buildTopRow() {
 }
 
 function getMonthStartDayNum() {
-    var y = assumedDate.getFullYear(); 
+    var y = assumedDate.getFullYear();
     var m = assumedDate.getMonth();
-    var firstDay = new Date(y, m, 1); 
+    var firstDay = new Date(y, m, 1);
     var monthStartDayNum = firstDay.getDay();
 
     if (monthStartDayNum == 0) {
@@ -619,7 +622,7 @@ function getMonthStartDayNum() {
 }
 
 function getNumDaysInMonth() {
-    var theMonth = assumedDate.getMonth()+1; // Here January is 0 based
+    var theMonth = assumedDate.getMonth() + 1; // Here January is 0 based
     var theYear = assumedDate.getFullYear();
     return new Date(theYear, theMonth, 0).getDate();
 }
@@ -629,9 +632,9 @@ function testForIsAvailable(dayCounter) {
     //turn the day (to be tested) into a date object
     var boxDate = new Date(assumedDate.getFullYear(), assumedDate.getMonth(), dayCounter);
 
-    if(typeof unavailableBefore == 'object') {
+    if (typeof unavailableBefore == 'object') {
 
-        if (boxDate<=unavailableBefore) {
+        if (boxDate <= unavailableBefore) {
             return false;
         }
 
@@ -639,7 +642,7 @@ function testForIsAvailable(dayCounter) {
 
     if (typeof unavailableAfter == 'object') {
 
-        if (boxDate>=unavailableAfter) {
+        if (boxDate >= unavailableAfter) {
             return false;
         }
 
@@ -666,10 +669,10 @@ function changeMonth(direction) {
     var m = assumedDate.getMonth();
 
     if (direction == 'down') {
-        var newM = m-1;
+        var newM = m - 1;
         assumedDate.setMonth(newM);
     } else {
-        var newM = m+1;
+        var newM = m + 1;
         assumedDate.setMonth(newM);
     }
 
@@ -684,10 +687,10 @@ function changeMonth(direction) {
     } else {
         var datePickerCalendar = activePopUp;
         var childNodes = datePickerCalendar.childNodes;
-        childNodes[1].remove(); //remove the table with the days    
-        //build and populate calendar table   
+        childNodes[1].remove(); //remove the table with the days
+        //build and populate calendar table
         var datePickerTbl = buildAndPopulateDatePickerTbl();
-        datePickerCalendar.appendChild(datePickerTbl); 
+        datePickerCalendar.appendChild(datePickerTbl);
     }
 }
 
@@ -735,14 +738,14 @@ function customClassRemove(targetEl, strStart) {
 
     for (var i = 0; i < elClasses.length; i++) {
 
-        if (elClasses[i].length>targetIndex) {
+        if (elClasses[i].length > targetIndex) {
             var classStart = elClasses[i].substring(0, targetIndex);
 
             if (classStart == strStart) {
                 elClasses.remove(elClasses[i]);
             }
         }
-        
+
     }
 }
 
@@ -766,18 +769,19 @@ function disableDatePickerInputs(className) {
     for (var i = 0; i < datePickerInputs.length; i++) {
 
         // javascript get character that was pressed
-     
+
         var originalValue = '';
         datePickerInputs[i].addEventListener("focus", (ev) => {
             originalValue = ev.target.value;
         });
-        
+
         datePickerInputs[i].addEventListener("blur", (ev) => {
             if (parseDate(ev.target.value) == 'Invalid Date') {
-                ev.target.value = originalValue;
-            }  
+                // ev.target.value = originalValue;
+                ev.target.value = 'fred';
+            }
         });
-        
+
 
         datePickerInputs[i].addEventListener("keyup", (ev) => {
             var isNumber = /^[0-9]$/i.test(ev.key);
@@ -785,7 +789,7 @@ function disableDatePickerInputs(className) {
                 if (ev.target.value.length == 0) {
                     originalValue = ev.target.value;
                 } else {
-                    ev.target.value = originalValue;    
+                    ev.target.value = originalValue;
                 }
             } else if (isNumber !== true) {
                 ev.target.value = originalValue;
@@ -799,7 +803,7 @@ function disableDatePickerInputs(className) {
                     activePopUp.remove();
                 }
             }
-            
+
         });
 
     }
@@ -816,7 +820,7 @@ function attemptExtractYear(text) {
 
         if (isNumber == true) {
             score++;
-            extractedYear+= c;
+            extractedYear += c;
         } else {
             score = 0;
             extractedYear = '';
@@ -837,37 +841,6 @@ function getDateFromInput() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function destroyEls(className) {
     var targetEls = document.getElementsByClassName(className);
     for (var i = 0; i < targetEls.length; i++) {
@@ -885,7 +858,7 @@ function childOf(node, ancestor) {
         if (child === ancestor) return true;
         child = child.parentNode;
     }
-    return false;   
+    return false;
 }
 
 function listenForOffsideClicks(inputClass, popUpClass) {
@@ -902,14 +875,14 @@ function isOffside(clickedTimePickerEl, inputClass, popUpClass) {
 
     var offSide = true;
 
-    if ((clickedTimePickerEl.classList.contains(inputClass)) || (clickedTimePickerEl.classList.contains(popUpClass)))  {
+    if ((clickedTimePickerEl.classList.contains(inputClass)) || (clickedTimePickerEl.classList.contains(popUpClass))) {
         offSide = false;
     } else {
         //let's check to see if is child of one of the target classes
         var targetAncestors = getTargetAncestors(inputClass, popUpClass);
 
         for (var i = 0; i < targetAncestors.length; i++) {
-            
+
             var isChildOf = childOf(clickedTimePickerEl, targetAncestors[i]);
 
             if (isChildOf == true) {
@@ -939,35 +912,6 @@ function getTargetAncestors(inputClass, popUpClass) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //time pickers
 function initTimePickers() {
     //listen for a time-picker input field getting clicked
@@ -977,7 +921,7 @@ function initTimePickers() {
         var timePickerVal = timePickerFields[i].value;
 
         if (timePickerVal.length == 8) {
-            timePickerFields[i].value = timePickerVal.substring(0, timePickerVal.length-3); 
+            timePickerFields[i].value = timePickerVal.substring(0, timePickerVal.length - 3);
         }
 
         timePickerFields[i].addEventListener("click", (ev) => {
@@ -1012,7 +956,7 @@ function buildTimePickerPopUp(clickedTimePickerEl, parentCalendar) {
     timePickerTblTopTh.appendChild(tblHeadline);
     timePickerTblTopTr.appendChild(timePickerTblTopTh);
     timePickerTbl.appendChild(timePickerTblTopTr);
-    
+
     //first row
     var tblRow = document.createElement("tr");
     var tblCell = document.createElement("td");
@@ -1138,10 +1082,10 @@ function updateTimePicker() {
     if (activeType == 'datetime-picker-calendar') {
         var timeGuideCell = document.querySelector(".inner-timepicker > tr:nth-child(2) > td:nth-child(2)");
         var cellInnerHTML = activeEl.value;
-        
+
         //format the date and time, then add to the calendar.
         var niceDate = formatDateObj(assumedDate, 'datetime');
-    
+
         //update the textfield so that it has the nice date
         activeEl.value = niceDate;
 
@@ -1155,7 +1099,7 @@ function updateTimePicker() {
         var timeValue = formatDateObj(assumedDate, 'time');
         var timeGuideCell = document.querySelector(".timepicker-popup > table > tr:nth-child(2) > td:nth-child(2)");
         timeGuideCell.innerHTML = timeValue;
-        clickedTimePickerEl.value = timeValue; 
+        clickedTimePickerEl.value = timeValue;
     }
 }
 
@@ -1169,7 +1113,7 @@ function setToNow() {
     currentMinute = addZeroBefore(currentMinute);
     assumedDate.setHours(currentHour, currentMinute);
 
-    if (activeType == 'datetime-picker-calendar') {
+    if (activeType === 'datetime-picker-calendar') {
         var hourSlider = document.querySelector(".inner-timepicker > tr:nth-child(3) > td:nth-child(2) > input[type=range]");
         var minuteSlider = document.querySelector(".inner-timepicker > tr:nth-child(4) > td:nth-child(2) > input[type=range]");
         refreshDatePickerHead();
@@ -1182,7 +1126,7 @@ function setToNow() {
         var hourSlider = document.querySelector(".timepicker-popup > table > tr:nth-child(3) > td:nth-child(2) > input[type=range]");
         var minuteSlider = document.querySelector(".timepicker-popup > table > tr:nth-child(4) > td:nth-child(2) > input[type=range]");
     }
-    
+
     updateTimePickerSliders(hourSlider, minuteSlider);
     updateTimePicker();
 }
@@ -1230,7 +1174,7 @@ function buildDateTimePickerCalendar() {
     //build and populate calendar table
     var datePickerTbl = buildAndPopulateDatePickerTbl();
     dateTimePickerCalendar.appendChild(datePickerTbl);
-    activePopUp = dateTimePickerCalendar;  
+    activePopUp = dateTimePickerCalendar;
     buildTimePickerPopUp(activeEl, dateTimePickerCalendar);
 }
 
@@ -1246,7 +1190,7 @@ function initDateTimePickers() {
             activeEl = ev.target;
             activeType = 'datetime-picker-calendar';
             targetInputValue = activeEl.value;
-            targetInputValueSm = targetInputValue.substring(0,10);
+            targetInputValueSm = targetInputValue.substring(0, 10);
 
             unavailableBefore = '';
             unavailableAfter = '';
