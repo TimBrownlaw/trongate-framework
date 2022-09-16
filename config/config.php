@@ -22,7 +22,7 @@ error_reporting(E_ALL);
 //The main config file
 define('BASE_URL', 'http://localhost/trongate_simple_blog/');
 define('ENV', 'dev');
-define('DEFAULT_MODULE', 'welcome');
-define('DEFAULT_CONTROLLER', 'Welcome');
-define('DEFAULT_METHOD', 'index');
+define('DEFAULT_MODULE', 'blog_notices');
+define('DEFAULT_CONTROLLER', 'Blog_notices');
+define('DEFAULT_METHOD', 'all');
 define('MODULE_ASSETS_TRIGGER', '_module');
