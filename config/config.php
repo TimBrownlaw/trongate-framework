@@ -20,7 +20,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 //The main config file
-define('BASE_URL', 'http://trongate-simpleblog.test/');
+define('BASE_URL', 'http://localhost/trongate_simple_blog/');
 define('ENV', 'dev');
 define('DEFAULT_MODULE', 'welcome');
 define('DEFAULT_CONTROLLER', 'Welcome');
