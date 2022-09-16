@@ -1,6 +1,4 @@
-
+.idea/
 \.phpintel/
-blog_*/
-api.json
 
-/config/*
+
